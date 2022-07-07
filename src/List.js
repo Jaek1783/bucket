@@ -4,10 +4,12 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { completeBucket, deleteBucket } from "./Bucket";
 
-const List = () => {
+
+const List =() => {
   const dispatch = useDispatch();
   const data = useSelector((state) => state.Bucket.list);
   let navigate = useNavigate();
+  // console.log(doc.data());
   return (
     <MyUl>
       {data.map((list, index) => {
@@ -15,13 +17,8 @@ const List = () => {
           <li key={index}>
             <StyledList
               completed={list.completed}
-              onClick={() => {
-                navigate(`/detail/` + index);
-                // console.log(index);
-              }}
-            >
-              {list.text}
-            </StyledList>
+              onClick={() => {navigate(`/detail/` + index);
+            }}>{list.text}</StyledList>
             <StyledButton
               onClick={() => {
                 dispatch(deleteBucket(index));
@@ -82,7 +79,7 @@ const StyledList = styled.p`
   height: 2rem;
   text-align: center;
   background-color: ${(props) =>
-    props.completed === "true" ? "#ccc" : "antiquewhite"};
+    props.completed === "true" ? "skyblue" : "antiquewhite"};
   color: ${(props) => (props.completed === "true" ? "#fff" : "#000")};
   line-height: 2rem;
   font-size: 1rem;

@@ -6,25 +6,44 @@ import { Route, Routes } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import Detail from "./Detail";
 import Progress from "./Progress";
-import { createBucket } from "./Bucket";
-import { db  } from "./firebase";
-import { collection, getDocs, addDoc } from "firebase/firestore";
+import { createBucket,bucketFirebase } from "./Bucket";
 
 export default function App() {
   // useEffect(async()=>{
-  //   const query = await getDocs(collection(db,"bucket"));
-  //   // console.log(query);
-  //   query.forEach((doc)=>{
-  //     console.log(doc.id, doc.data());
-  //   });
+
   // },[]);
-  useEffect(async()=>{
-    console.log(db);
-    addDoc(collection(db, "bucket"),{text:"new",completed:"false"});
+  // useEffect(async()=>{
+    // firebase CRUD
+
+  // firebase Create
+
+    // console.log(db);
+    // addDoc(collection(db, "bucket"),{text:"new",completed:"false"});
+
+  // firebase Read
+
+    //   const query = await getDocs(collection(db,"bucket"));
+    // console.log(query);
+    //   query.forEach((doc)=>{
+    //     console.log(doc.id, doc.data());
+    //   });
+  // firebase Update
+
+    // const docRef = doc(db, "bucket", "BSFwZhRsVFNfpT2dJgC6");
+    // updateDoc(docRef, {completed:"true"});
+  // firebase Delete
+
+  //   const docRef = doc(db, "bucket", "BSFwZhRsVFNfpT2dJgC6");
+  //   deleteDoc(docRef);
+  // },[]);
+
+  useEffect(()=>{
+    dispatch(bucketFirebase());
+    // console.log(bucket_data);
   },[]);
   const myRef = useRef(null);
   const dispatch = useDispatch();
-  const addList = () => {
+  const addList = async() => {
     const value = myRef.current.value;
     // setBucketList([...BucketList, value]);
     dispatch(createBucket({ text: value, completed: "false" }));
@@ -82,7 +101,7 @@ const InputStyle = styled.div`
     height: 50px;
     border: 3px dotted antiquewhite;
     border-radius: 15px;
-    padding: 0 5px;
+    padding: 0 50px;
     font-size: 20px;
   }
   input:focus {
@@ -93,7 +112,8 @@ const InputStyle = styled.div`
 
 const ButtonStyled = styled.button`
   position: fixed;
-  right: 10%;
+  z-index:9999;
+  right: 1%;
   bottom: 10%;
   background-color: antiquewhite;
   border: none;
