@@ -1,6 +1,6 @@
 // bucket.js
 import { db  } from "./firebase";
-import { collection, getDoc,getDocs, addDoc, updateDoc, doc, deleteDoc } from "firebase/firestore";
+import { collection,getDocs, addDoc, updateDoc, doc, deleteDoc } from "firebase/firestore";
 const initState = {
   list: [
     // { text: "혼자 여행 하기", completed: "false" },
@@ -12,6 +12,7 @@ const initState = {
 const LOAD = "bucket/LOAD";
 const CREATE = "bucket/CREATE";
 const COMPLETE = "bucket/COMPLETE";
+const RETRY = "bucket/RETRY";
 const DELETE = "bucket/DELETE";
 
 // Action Creators
@@ -20,6 +21,9 @@ export function createBucket(bucket) {
 }
 export function completeBucket(bucket_index) {
   return { type: COMPLETE, bucket_index };
+}
+export function retryBucket(bucket_index) {
+  return {type: RETRY , bucket_index};
 }
 export function deleteBucket(bucket_index) {
   return { type: DELETE, bucket_index };
@@ -64,6 +68,17 @@ export const completeBucketFB = (bucket_id) => {
    dispatch(completeBucket(bucket_index));
   }
 }
+export const retryBucketFB = (bucket_id) => {
+  return async  function (dispatch, getState) {
+    const docRef = doc(db, "bucket", bucket_id);
+   await updateDoc(docRef, {completed:false});
+   const bucket_list = getState().Bucket.list;
+   const bucket_index = bucket_list.findIndex((b)=>{
+    return b.id === bucket_id;
+   })
+   dispatch(retryBucket(bucket_index));
+  }
+}
 export const deleteBucketFB = (bucket_id)=> {
   return async function (dispatch, getState){
     const docRef = doc(db, "bucket", bucket_id);
@@ -86,6 +101,16 @@ export default function reducer(state = initState, action = {}) {
       const new_list = state.list.map((l, idx) => {
         if (action.bucket_index === idx) {
           return { ...l, completed:true };
+        } else {
+          return l; 
+        }
+      });
+      return { list: new_list };
+    }
+    case "bucket/RETRY": {
+      const new_list = state.list.map((l, idx) => {
+        if (action.bucket_index === idx) {
+          return { ...l, completed:false };
         } else {
           return l; 
         }

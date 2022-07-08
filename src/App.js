@@ -9,6 +9,10 @@ import Progress from "./Progress";
 import { addBucketFB,loadBucketFB  } from "./Bucket";
 
 export default function App() {
+  let date = new Date();
+  let today = date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate();
+  // let today= toLocaleDateString();
+  console.log(today);
   useEffect(()=>{
     dispatch(loadBucketFB ());
   },[]);
@@ -22,7 +26,10 @@ export default function App() {
   };
   return (
     <div className="App">
-      <header><h1>나의 버킷리스트</h1></header>
+      <HeaderStyle>
+        <h1>나의 버킷리스트</h1>
+        <div>오늘 : {today}</div>
+      </HeaderStyle>
       <Progress />
       <InputStyle>
         <input type="text" ref={myRef} />
@@ -36,8 +43,8 @@ export default function App() {
         </button>
       </InputStyle>
       <Routes>
-        <Route path="/bucket" element={<List />} />
-        <Route path="/detail/:index" element={<Detail />} />
+        <Route path="/bucket" element={<List/>} />
+        <Route path="/detail/:index" element={<Detail  today={today}  />} />
       </Routes>
       <ButtonStyled
         onClick={() => {
@@ -55,11 +62,13 @@ const InputStyle = styled.div`
   border-bottom: 1px dotted #000;
   position: relative;
   button {
-    background-color: #fff;
+    width:50px;
+    height:50px;
+    background-color: antiquewhite;
     border: none;
     border-right: 1px solid #ccc;
     border-bottom: 1px solid #ccc;
-    margin-left: 5px;
+    margin-left: 2rem;
     padding: 5px;
     border-radius: 15px;
   }
@@ -69,7 +78,7 @@ const InputStyle = styled.div`
     border-left: 1px solid #ccc;
   }
   input {
-    width: 60%;
+    width: 80%;
     height: 50px;
     border: 3px dotted antiquewhite;
     border-radius: 15px;
@@ -81,8 +90,31 @@ const InputStyle = styled.div`
     border: 3px dotted skyblue;
   }
 `;
+const HeaderStyle = styled.header`
+  display:flex;
+  h1 {
+    width: 80%;
+    border-radius: 15px;
+    font-size: 1.4em;
+    margin: 0 auto 1rem;
+    color: skyblue;
+    background-color: antiquewhite;
+    padding: 0.4rem 0;
+  }
+  div{
+    width: 10%;
+    border-radius: 15px;
+    font-size: 1.4em;
+    margin: 0 auto 1rem;
+    color: skyblue;
+    background-color: antiquewhite;
+    padding: 0.4rem 0;
+  }
+`;
 
 const ButtonStyled = styled.button`
+width:50px;
+height:50px;
   position: fixed;
   z-index:9999;
   right: 1%;
@@ -99,4 +131,4 @@ const ButtonStyled = styled.button`
     border-top: 1px solid #ccc;
     border-left: 1px solid #ccc;
   }
-`;
+`; 

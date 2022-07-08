@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { completeBucketFB, deleteBucketFB } from "./Bucket";
+import { completeBucketFB, deleteBucketFB, retryBucketFB } from "./Bucket";
 import { db  } from "./firebase";
 import { collection, getDocs, addDoc, updateDoc, doc, deleteDoc } from "firebase/firestore";
 
@@ -18,8 +18,10 @@ const List =() => {
           <li key={index}>
             <StyledList
               completed={list.completed}
-              onClick={() => {navigate(`/detail/` + index);
+              onClick={() => {
+              // onClick={() => {navigate(`/detail/` + index);
             }}>{list.text}</StyledList>
+            {/* }}>{list.text} <span>클릭해서 상세보기</span></StyledList> */}
             <StyledButton
               onClick={() => {
                 dispatch(deleteBucketFB (data[index].id ));
@@ -34,6 +36,15 @@ const List =() => {
               }}
             >
               완료
+            </StyledButton>
+            <StyledButton
+              onClick={() => {
+                // dispatch(completeBucket(index));
+                // dispatch(completeBucketFB(data[index].id));
+                  dispatch(retryBucketFB(data[index].id));
+              }}
+            >
+              다시하기
             </StyledButton>
           </li>
         );
@@ -76,7 +87,6 @@ const StyledButton = styled.button`
 `;
 
 const StyledList = styled.p`
-  cursor: pointer;
   width: 80%;
   height: 2rem;
   text-align: center;
@@ -85,4 +95,11 @@ const StyledList = styled.p`
   color: ${(props) => (props.completed === "true" ? "#fff" : "#000")};
   line-height: 2rem;
   font-size: 1rem;
+  position:relative;
+  span{
+    position:absolute;
+    right:0;
+    font-size:.7rem;
+    padding-right:100px;
+  }
 `;
