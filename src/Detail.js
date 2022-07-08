@@ -1,16 +1,18 @@
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-const Detail = (props) => {
+const Detail = () => {
   const params = useParams();
-  const list_data = useSelector((state) => state.Bucket.list);
+  const bucket_list = useSelector((state) => state.Bucket.list);
+  const index = params.index;
   let navigate = useNavigate();
   return (
     <div>
-      <p>{list_data[params.index].text}</p>
+      <p>{bucket_list[index]? bucket_list[index].text: ""}</p>
       <button
         onClick={() => {
-          navigate(`/`);
+          navigate(`/bucket`);
+          
         }}
       >
         처음으로

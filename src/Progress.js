@@ -5,7 +5,7 @@ const Progress = () => {
   const data = useSelector((state) => state.Bucket.list);
   let count = 0;
   data.map((b) => {
-    if (b.completed === "true") {
+    if (b.completed === true) {
       count++;
     }
   });

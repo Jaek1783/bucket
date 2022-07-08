@@ -2,14 +2,15 @@ import React from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { completeBucket, deleteBucket } from "./Bucket";
+import { completeBucketFB, deleteBucketFB } from "./Bucket";
+import { db  } from "./firebase";
+import { collection, getDocs, addDoc, updateDoc, doc, deleteDoc } from "firebase/firestore";
 
 
 const List =() => {
   const dispatch = useDispatch();
   const data = useSelector((state) => state.Bucket.list);
   let navigate = useNavigate();
-  // console.log(doc.data());
   return (
     <MyUl>
       {data.map((list, index) => {
@@ -21,14 +22,15 @@ const List =() => {
             }}>{list.text}</StyledList>
             <StyledButton
               onClick={() => {
-                dispatch(deleteBucket(index));
+                dispatch(deleteBucketFB (data[index].id ));
               }}
             >
               삭제
             </StyledButton>
             <StyledButton
               onClick={() => {
-                dispatch(completeBucket(index));
+                // dispatch(completeBucket(index));
+                dispatch(completeBucketFB(data[index].id));
               }}
             >
               완료
@@ -79,7 +81,7 @@ const StyledList = styled.p`
   height: 2rem;
   text-align: center;
   background-color: ${(props) =>
-    props.completed === "true" ? "skyblue" : "antiquewhite"};
+    props.completed === true ? "skyblue" : "antiquewhite"};
   color: ${(props) => (props.completed === "true" ? "#fff" : "#000")};
   line-height: 2rem;
   font-size: 1rem;

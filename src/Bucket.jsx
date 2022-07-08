@@ -1,6 +1,6 @@
 // bucket.js
 import { db  } from "./firebase";
-import { collection, getDocs, addDoc, updateDoc, doc, deleteDoc } from "firebase/firestore";
+import { collection, getDoc,getDocs, addDoc, updateDoc, doc, deleteDoc } from "firebase/firestore";
 const initState = {
   list: [
     // { text: "혼자 여행 하기", completed: "false" },
@@ -24,52 +24,82 @@ export function completeBucket(bucket_index) {
 export function deleteBucket(bucket_index) {
   return { type: DELETE, bucket_index };
 }
-export function loadBucket (bucketStore){
-  return{type:LOAD, bucketStore};
+export function loadBucket (bucket_list){
+  return{type:LOAD, bucket_list};
 }
 
-export const bucketFirebase = ()=>{
+//middleweares
+export const loadBucketFB = ()=>{
   return async function (dispatch){
     const bucket_data = await getDocs(collection(db, "bucket"));
-    // console.log(bucket_data);
     let bucket_list = [];
-    bucket_data.forEach((doc)=>{
-      bucket_list = [...bucket_list, {...doc.data()}]
-      // bucket_list.push({...doc.data()});
+    bucket_data.forEach((b)=>{
+      // bucket_list = [...bucket_list, {...b.data()}];
+      bucket_list.push({id:b.id,  ...b.data()});
     });
-    console.log(bucket_list);
     dispatch(loadBucket(bucket_list));
+
+  }
+}
+
+export const addBucketFB = (bucket) => {
+  return async function (dispatch) {
+  const docRef = await addDoc(collection(db, "bucket"),bucket);
+  // const _bucket = await getDoc (docRef);  
+  const bucketData = {id: docRef.id, ...bucket};
+console.log(bucketData  ); 
+// console.log(docRef);
+  dispatch(createBucket(bucketData)) ;
+  }
+}
+export const completeBucketFB = (bucket_id) => {
+  return async  function (dispatch, getState) {
+    const docRef = doc(db, "bucket", bucket_id);
+   await updateDoc(docRef, {completed:true});
+  //  console.log(getState().Bucket);
+   const bucket_list = getState().Bucket.list;
+   const bucket_index = bucket_list.findIndex((b)=>{
+    return b.id === bucket_id;
+   })
+   dispatch(completeBucket(bucket_index));
+  }
+}
+export const deleteBucketFB = (bucket_id)=> {
+  return async function (dispatch, getState){
+    const docRef = doc(db, "bucket", bucket_id);
+    await deleteDoc(docRef);
+    const bucket_list = getState().Bucket.list;
+    const bucket_index = bucket_list.findIndex((b)=>{
+     return b.id === bucket_id;
+    })
+    dispatch(deleteBucket(bucket_index));
   }
 }
 // Reducer
 export default function reducer(state = initState, action = {}) {
   switch (action.type) {
-    // do reducer stuff
     case "bucket/CREATE": {
       const new_list = [...state.list, action.bucket];
       return { list: new_list };
     }
     case "bucket/COMPLETE": {
       const new_list = state.list.map((l, idx) => {
-        // console.log(l);
-        // console.log(action.bucket_index !== idx, action.bucket_index, idx);
         if (action.bucket_index === idx) {
-          return { ...l, completed: "true" };
+          return { ...l, completed:true };
         } else {
-          return l;
+          return l; 
         }
       });
       return { list: new_list };
     }
     case "bucket/DELETE": {
       const new_list = state.list.filter((l, idx) => {
-        // console.log(action.bucket_index !== idx, action.bucket_index, idx);
         return action.bucket_index !== idx;
       });
       return { list: new_list };
     }
     case "bucket/LOAD":{
-      return {list: action.bucketStore}
+      return {list: action.bucket_list}
     }
     default:
       return state;

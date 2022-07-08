@@ -6,51 +6,23 @@ import { Route, Routes } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import Detail from "./Detail";
 import Progress from "./Progress";
-import { createBucket,bucketFirebase } from "./Bucket";
+import { addBucketFB,loadBucketFB  } from "./Bucket";
 
 export default function App() {
-  // useEffect(async()=>{
-
-  // },[]);
-  // useEffect(async()=>{
-    // firebase CRUD
-
-  // firebase Create
-
-    // console.log(db);
-    // addDoc(collection(db, "bucket"),{text:"new",completed:"false"});
-
-  // firebase Read
-
-    //   const query = await getDocs(collection(db,"bucket"));
-    // console.log(query);
-    //   query.forEach((doc)=>{
-    //     console.log(doc.id, doc.data());
-    //   });
-  // firebase Update
-
-    // const docRef = doc(db, "bucket", "BSFwZhRsVFNfpT2dJgC6");
-    // updateDoc(docRef, {completed:"true"});
-  // firebase Delete
-
-  //   const docRef = doc(db, "bucket", "BSFwZhRsVFNfpT2dJgC6");
-  //   deleteDoc(docRef);
-  // },[]);
-
   useEffect(()=>{
-    dispatch(bucketFirebase());
-    // console.log(bucket_data);
+    dispatch(loadBucketFB ());
   },[]);
   const myRef = useRef(null);
   const dispatch = useDispatch();
-  const addList = async() => {
+  const addList = async () => {
     const value = myRef.current.value;
-    // setBucketList([...BucketList, value]);
-    dispatch(createBucket({ text: value, completed: "false" }));
+    dispatch(addBucketFB({ text: value, completed: "false" }));  
+
+
   };
   return (
     <div className="App">
-      <h1>나의 버킷리스트</h1>
+      <header><h1>나의 버킷리스트</h1></header>
       <Progress />
       <InputStyle>
         <input type="text" ref={myRef} />
@@ -64,7 +36,7 @@ export default function App() {
         </button>
       </InputStyle>
       <Routes>
-        <Route path="/" element={<List />} />
+        <Route path="/bucket" element={<List />} />
         <Route path="/detail/:index" element={<Detail />} />
       </Routes>
       <ButtonStyled
