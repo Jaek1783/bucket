@@ -9,10 +9,6 @@ import Progress from "./Progress";
 import { addBucketFB,loadBucketFB  } from "./Bucket";
 
 export default function App() {
-  let date = new Date();
-  let today = date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate();
-  // let today= toLocaleDateString();
-  console.log(today);
   useEffect(()=>{
     dispatch(loadBucketFB ());
   },[]);
@@ -28,7 +24,6 @@ export default function App() {
     <div className="App">
       <HeaderStyle>
         <h1>나의 버킷리스트</h1>
-        <div>오늘 : {today}</div>
       </HeaderStyle>
       <Progress />
       <InputStyle>
@@ -44,7 +39,6 @@ export default function App() {
       </InputStyle>
       <Routes>
         <Route path="/bucket" element={<List/>} />
-        <Route path="/detail/:index" element={<Detail  today={today}  />} />
       </Routes>
       <ButtonStyled
         onClick={() => {
@@ -78,11 +72,12 @@ const InputStyle = styled.div`
     border-left: 1px solid #ccc;
   }
   input {
-    width: 80%;
+    width: 70%;
     height: 50px;
     border: 3px dotted antiquewhite;
     border-radius: 15px;
     padding: 0 50px;
+    margin-bottom:1rem;
     font-size: 20px;
   }
   input:focus {
@@ -94,15 +89,6 @@ const HeaderStyle = styled.header`
   display:flex;
   h1 {
     width: 80%;
-    border-radius: 15px;
-    font-size: 1.4em;
-    margin: 0 auto 1rem;
-    color: skyblue;
-    background-color: antiquewhite;
-    padding: 0.4rem 0;
-  }
-  div{
-    width: 10%;
     border-radius: 15px;
     font-size: 1.4em;
     margin: 0 auto 1rem;
