@@ -3,8 +3,8 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { completeBucketFB, deleteBucketFB, retryBucketFB } from "./Bucket";
-import { db  } from "./firebase";
-import { collection, getDocs, addDoc, updateDoc, doc, deleteDoc } from "firebase/firestore";
+// import { db  } from "./firebase";
+// import { collection, getDocs, addDoc, updateDoc, doc, deleteDoc } from "firebase/firestore";
 
 
 const List =() => {
@@ -44,7 +44,7 @@ const List =() => {
                   dispatch(retryBucketFB(data[index].id));
               }}
             >
-              다시하기
+              <span>도전</span>
             </StyledButton>
           </li>
         );
