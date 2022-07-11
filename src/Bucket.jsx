@@ -51,7 +51,6 @@ export const addBucketFB = (bucket) => {
   const docRef = await addDoc(collection(db, "bucket"),bucket);
   // const _bucket = await getDoc (docRef);  
   const bucketData = {id: docRef.id, ...bucket};
-console.log(bucketData  ); 
 // console.log(docRef);
   dispatch(createBucket(bucketData)) ;
   }

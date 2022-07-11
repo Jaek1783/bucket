@@ -13,6 +13,7 @@ const Progress = () => {
     <Container>
       <View width={(count / data.length) * 100 + "%"}></View>
       <Dot></Dot>
+      <span>{(count / data.length) * 100+ "%" }</span>
     </Container>
   );
 };
@@ -25,6 +26,9 @@ const Container = styled.div`
   border-radius: 15px;
   background: #fdfdfd;
   display: flex;
+    span{
+      padding-left:10px;
+    }
 `;
 const View = styled.div`
   transition: 0.5s ease-in-out;

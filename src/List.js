@@ -17,12 +17,9 @@ const List =() => {
         return (
           <li key={index}>
             <StyledList
-              completed={list.completed}
-              onClick={() => {
-              // onClick={() => {navigate(`/detail/` + index);
-            }}>{list.text}</StyledList>
-            {/* }}>{list.text} <span>클릭해서 상세보기</span></StyledList> */}
-            <StyledButton
+              completed={list.completed}>{list.text}</StyledList>
+         <BtnContainer>
+         <StyledButton
               onClick={() => {
                 dispatch(deleteBucketFB (data[index].id ));
               }}
@@ -44,8 +41,9 @@ const List =() => {
                   dispatch(retryBucketFB(data[index].id));
               }}
             >
-              <span>도전</span>
+              도전
             </StyledButton>
+         </BtnContainer>
           </li>
         );
       })}
@@ -62,12 +60,15 @@ const MyUl = styled.ul`
     display: flex;
     justify-content: space-evenly;
     border-bottom: 1px solid #ccc;
+    border-radius:15px;
     margin: 0;
     margin-bottom: 1em;
     padding: 1em;
     font-size: 0.9em;
     list-style-type: none;
     text-align: left;
+    background-color:skyblue;
+    position:relative;
   }
 `;
 
@@ -76,8 +77,8 @@ const StyledButton = styled.button`
   border: none;
   border-right: 1px solid #ccc;
   border-bottom: 1px solid #ccc;
-  margin-left: 5px;
-  padding: 5px;
+  margin-left:30px;
+  padding: 10px;
   border-radius: 15px;
   :active {
     border: none;
@@ -85,14 +86,18 @@ const StyledButton = styled.button`
     border-left: 1px solid #ccc;
   }
 `;
-
+const BtnContainer = styled.div`
+position absolute;
+right:20px;
+top:10px;
+`;
 const StyledList = styled.p`
-  width: 80%;
+  width: 60%;
   height: 2rem;
   text-align: center;
   background-color: ${(props) =>
-    props.completed === true ? "skyblue" : "antiquewhite"};
-  color: ${(props) => (props.completed === "true" ? "#fff" : "#000")};
+    props.completed === true ? "#ccc" : "antiquewhite"};
+  text-decoration: ${(props) => (props.completed === true ? "line-through" : "none")};
   line-height: 2rem;
   font-size: 1rem;
   position:relative;
