@@ -14,7 +14,7 @@ const Detail = () => {
 
       <button
         onClick={() => {
-          navigate(`/`);
+          navigate(`/bucket`);
           
         }}
       >

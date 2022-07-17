@@ -4,7 +4,6 @@ import React, { useRef,useEffect,useState } from "react";
 import styled from "styled-components";
 import { Route, Routes } from "react-router-dom";
 import { useDispatch } from "react-redux";
-// import Detail from "./Detail";
 import Progress from "./Progress";
 import { addBucketFB,loadBucketFB  } from "./Bucket";
 
@@ -33,7 +32,6 @@ export default function App() {
           textCheck(e)
           }}/>
         <button
-          
           onClick={() => {
             if(text !== ""){
               addList();
@@ -48,7 +46,7 @@ export default function App() {
         </button>
       </InputStyle>
       <Routes>
-        <Route path="/" element={<List/>} />
+        <Route path="/bucket" element={<List/>} />
       </Routes>
       
       <ButtonStyled
