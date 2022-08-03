@@ -42,7 +42,6 @@ export const loadBucketFB = ()=>{
       bucket_list.push({id:b.id,  ...b.data()});
     });
     dispatch(loadBucket(bucket_list));
-
   }
 }
 

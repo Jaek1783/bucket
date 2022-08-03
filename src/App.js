@@ -1,22 +1,67 @@
 import "./styles.css";
 import List from "./List";
+import List_Tablet from "./List_Tablet";
 import React, { useRef,useEffect,useState } from "react";
 import styled from "styled-components";
-import { Route, Routes } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import Progress from "./Progress";
-import { addBucketFB,loadBucketFB  } from "./Bucket";
+import { addBucketFB,loadBucketFB,completeBucketFB  } from "./Bucket";
+import { useMediaQuery } from "react-responsive";
 
 export default function App() {
+  const timeRef = useRef(null);
+  const dayRef = useRef(null);
+  const [text , setText] = useState("");
+  const myRef = useRef(null);
+  const dateRef = useRef(null);
+  const dispatch = useDispatch();
+
+  useEffect(()=>{
+    let time = 86400;
+    let timeSet = "";
+    let timeHours = "";
+    let timeMin = "";
+    let timeSec = "";
+
+    let hours = "";
+    let min = "";
+    let sec = "";
+    setInterval(()=>{
+      const today = new Date();
+      const todayHours = today.getHours();
+      const todayMin = today.getMinutes();
+      const todaySec = today.getSeconds();
+
+  
+        timeSet = parseInt(time/60);
+        timeHours = parseInt(timeSet/60);
+        timeMin = timeSet%60;
+        timeSec = time%60;
+        time --;
+
+        hours = timeHours - todayHours;
+        min = timeMin - todayMin;
+        
+      timeRef.current.innerHTML = `${hours<10 ? `0${hours}`:hours}시간 ${min<10 ? `0${min}`:min} 분 ${timeSec<10? `0 ${timeSec}` : timeSec} 초`;
+      dayRef.current.innerHTML = `${todayHours<10 ? `AM 0${todayHours}`:todayHours > 12 ? `PM 0${todayHours-12}` : `AM ${todayHours}`}:${todayMin<10 ? `0${todayMin}`:todayMin}:${todaySec<10 ? `0${todaySec}`:todaySec}`;
+      if(time === 0){
+        dispatch(completeBucketFB(data[index].id));
+      }
+    },1000);
+    return () => clearInterval(timer);
+  },[]);
+  const isTablet = useMediaQuery({
+    query:"(min-width:980px)"
+  });
   useEffect(()=>{
     dispatch(loadBucketFB ());
   },[]);
-  const [text , setText] = useState("");
-  const myRef = useRef(null);
-  const dispatch = useDispatch();
+
+
   const addList = async () => {
     const value = myRef.current.value;
-    dispatch(addBucketFB({ text: value, completed: "false" }));
+    const date = dateRef.current.value;
+    dispatch(addBucketFB({date:date, text: value, completed: "false" }));
   };
   const textCheck = (e)=>{
     setText(e.target.value);
@@ -24,11 +69,17 @@ export default function App() {
   return (
     <div className="App">
       <HeaderStyle>
-        <h1>나의 버킷리스트</h1>
+        <h1>매일쓰는 계획표</h1>
+        <div className="timer">
+          <div>현재 시간 : <span ref={dayRef}></span> </div>
+          <div>오늘 남은시간 : <span ref={timeRef}></span> </div>
+        </div>
+
       </HeaderStyle>
       <Progress />
-      <InputStyle>
-        <input type="text" ref={myRef} placeholder="도전 리스트를 적어주세요" value={text} onChange={(e)=>{
+      <InputStyle isTablet={isTablet}>
+        <input type="date" ref={dateRef}/>
+        <input type="text" ref={myRef} placeholder="오늘의 계획을 적어주세요" value={text} onChange={(e)=>{
           textCheck(e)
           }}/>
         <button
@@ -45,10 +96,7 @@ export default function App() {
           올리기
         </button>
       </InputStyle>
-      <Routes>
-        <Route path="/bucket" element={<List/>} />
-      </Routes>
-      
+      {isTablet ? <List/>:<List_Tablet/>}
       <ButtonStyled
         onClick={() => {
           window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
@@ -70,6 +118,13 @@ const HeaderStyle = styled.header`
     background-color: skyblue;
     padding: 0.4rem 0;
   }
+  div.timer{
+    display:flex;
+    justify-content:space-evenly;
+    color:skyblue;
+    font-size: 1.4em;
+    padding:1rem;
+  }
 `;
 const InputStyle = styled.div`
   padding-bottom: 1em;
@@ -79,6 +134,9 @@ const InputStyle = styled.div`
   button {
     width:50px;
     height:50px;
+    position:${props=>props.isTablet ? "":"absolute"};
+    top:75px;
+    right:5%;
     background-color: antiquewhite;
     border: none;
     border-right: 1px solid #ccc;

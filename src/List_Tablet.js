@@ -1,15 +1,14 @@
-import React, {useEffect, useRef} from "react";
+import React from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { completeBucketFB, deleteBucketFB, retryBucketFB } from "./Bucket";
 
 
 const List =() => {
-  const today = new Date();
-  const month = today.getMonth()+1;
-  const day = today.getDate();
   const dispatch = useDispatch();
   const data = useSelector((state) => state.Bucket.list);
+  let navigate = useNavigate();
   return (
     <MyUl>
       {data.map((list, index) => {
@@ -50,13 +49,15 @@ const MyUl = styled.ul`
   flex-direction: column-reverse;
   li {
     display: flex;
-    justify-content: space-evenly;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
     border-bottom: 1px solid #ccc;
     border-radius:15px;
     margin: 0;
     margin-bottom: 1em;
     padding: 1em;
-    font-size: 0.9em;
+    font-size: 1em;
     list-style-type: none;
     text-align: left;
     background-color:skyblue;
@@ -64,11 +65,6 @@ const MyUl = styled.ul`
       .date{
         display:flex;
         align-items:center;
-      }
-      .timer{
-        display:flex;
-        align-items:center;
-        padding-left:5px;
       }
   }
 `;
@@ -78,7 +74,7 @@ const StyledButton = styled.button`
   border: none;
   border-right: 1px solid #ccc;
   border-bottom: 1px solid #ccc;
-  margin-left:30px;
+  margin:1rem;
   padding: 10px;
   border-radius: 15px;
   :active {
@@ -88,9 +84,10 @@ const StyledButton = styled.button`
   }
 `;
 const StyledList = styled.p`
-  width: 60%;
+  width: 80%;
   height: 2rem;
   text-align: center;
+  margin-top:.5rem;
   background-color: ${(props) =>
     props.completed === true ? "#ccc" : "antiquewhite"};
   text-decoration: ${(props) => (props.completed === true ? "line-through" : "none")};
