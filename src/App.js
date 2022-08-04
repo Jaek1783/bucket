@@ -42,11 +42,13 @@ export default function App() {
         hours = timeHours - todayHours;
         min = timeMin - todayMin;
         
-      timeRef.current.innerHTML = `${hours<10 ? `0${hours}`:hours}시간 ${min<10 ? `0${min}`:min} 분 ${timeSec<10? `0 ${timeSec}` : timeSec} 초`;
-      dayRef.current.innerHTML = `${todayHours<10 ? `AM 0${todayHours}`:todayHours > 12 ? `PM 0${todayHours-12}` : `AM ${todayHours}`}:${todayMin<10 ? `0${todayMin}`:todayMin}:${todaySec<10 ? `0${todaySec}`:todaySec}`;
-      if(time === 0){
-        dispatch(completeBucketFB(data[index].id));
-      }
+      timeRef.current.innerHTML = `${hours<10 ? `0${hours}`:hours}시간 ${min<10 ? `0${min}`:min} 분 ${timeSec<10? `0 ${timeSec}`
+       : timeSec} 초`;
+      dayRef.current.innerHTML = `${todayHours<10 ? `AM 0${todayHours}`:todayHours > 12 ? `PM 0${todayHours-12}`
+       : `AM ${todayHours}`}:${todayMin<10 ? `0${todayMin}`:todayMin}:${todaySec<10 ? `0${todaySec}`:todaySec}`;
+       if(time < 0 ){
+        time = 86400;
+       }
     },1000);
     return () => clearInterval(timer);
   },[]);
