@@ -25,8 +25,10 @@ export default function App() {
 
     let hours = "";
     let min = "";
-    let sec = "";
-    setInterval(()=>{
+    if(time < 0 ){
+      time = 86400;
+     }
+   const timer = setInterval(()=>{
       const today = new Date();
       const todayHours = today.getHours();
       const todayMin = today.getMinutes();
@@ -46,9 +48,6 @@ export default function App() {
        : timeSec} 초`;
       dayRef.current.innerHTML = `${todayHours<10 ? `AM 0${todayHours}`:todayHours > 12 ? `PM 0${todayHours-12}`
        : `AM ${todayHours}`}:${todayMin<10 ? `0${todayMin}`:todayMin}:${todaySec<10 ? `0${todaySec}`:todaySec}`;
-       if(time < 0 ){
-        time = 86400;
-       }
     },1000);
     return () => clearInterval(timer);
   },[]);
@@ -58,8 +57,6 @@ export default function App() {
   useEffect(()=>{
     dispatch(loadBucketFB ());
   },[]);
-
-
   const addList = async () => {
     const value = myRef.current.value;
     const date = dateRef.current.value;
