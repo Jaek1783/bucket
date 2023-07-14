@@ -4,16 +4,13 @@
 ## 서비스 소개
 매일 매일 계획표를 기록하고 완료될 때마다 표시해가는 '매일매일 계획표' 프로젝트
 
-## 서비스 아키텍처
-![버킷리스트 아키텍처](https://user-images.githubusercontent.com/73649967/179435714-32454277-3e48-4818-bd82-6fe19151572f.png)
-
 ## 제작기간
 * XD를 이용한 기획 및 디자인 1개월
 * 리액트 퍼블리싱 코딩 2주
 * 최종 디자인 수정, 파이어베이스 연동 및 배포(https연결) 1주
 
 ## 주소
-* https://www.buketlist.me
+* [https://www.buketlist.me](https://jaek1783.github.io/bucket/)
 
 ## 사용스택
 <img src="https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=React&logoColor=white"/> <img src="https://img.shields.io/badge/styled-components-DB7093?style=flat-square&logo=styled-components&logoColor=white"/>
